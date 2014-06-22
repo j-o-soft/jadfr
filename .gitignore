@@ -1,4 +1,10 @@
+# pycharm stuff
+.idea
+
+# private settings
 feedreader/settings/settings_local.py
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
