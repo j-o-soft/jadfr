@@ -1,0 +1,22 @@
+# requirements/dev.txt
+
+-r common.txt
+
+# Documentation
+sphinx
+
+# Debugging
+
+# installed via apt
+# ipdb
+django-debug-toolbar
+
+# Linting
+pylint
+
+# Testing
+pytest
+pytest-django
+pytest-pep8
+pytest-cov
+tox

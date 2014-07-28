@@ -1,0 +1,19 @@
+# requirements/common.txt
+
+# Django
+
+# installed via apt
+#Django>=1.6,<=1.7
+django-configurations
+
+
+#installed via apt
+#South>=1.0,<=1.1
+
+# Deployment
+fabric
+
+
+Werkzeug==0.9.6
+git+https://github.com/dmartin1/django-feeds.git@f7921ffeaebf07e42564a6417a79eb4520b5bfaf#egg=django_feeds-master
+opml

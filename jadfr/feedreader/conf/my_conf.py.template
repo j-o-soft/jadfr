@@ -1,0 +1,9 @@
+from base import Dev, Test
+
+
+class MyConf(Dev):
+    pass
+
+
+class MyTestConf(Test):
+    pass
