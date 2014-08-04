@@ -2,12 +2,12 @@ __author__ = 'j_schn14'
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Model, ForeignKey, IntegerField, ManyToManyField
-from feeds.models import Entry, Feed, Category
+from feeds.models import Entry, Feed
+
+from apps.categories.models import Category
 
 
 class UserFeed(Model):
-
-
     feed = ForeignKey(Feed)
     user = ForeignKey(User)
     categories = ManyToManyField(Category)

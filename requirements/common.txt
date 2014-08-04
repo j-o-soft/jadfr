@@ -17,3 +17,5 @@ fabric
 Werkzeug==0.9.6
 git+https://github.com/dmartin1/django-feeds.git@f7921ffeaebf07e42564a6417a79eb4520b5bfaf#egg=django_feeds-master
 opml
+opml=0.5
+django-mptt
