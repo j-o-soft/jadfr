@@ -5,7 +5,8 @@
 # installed via apt
 #Django>=1.6,<=1.7
 django-configurations
-
+djangorestframework
+django-filter>=0.5.4
 
 #installed via apt
 #South>=1.0,<=1.1
