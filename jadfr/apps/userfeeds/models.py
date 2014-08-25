@@ -4,13 +4,15 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models import Model, ForeignKey, IntegerField, ManyToManyField, CharField
 from feeds.models import Entry, Feed
 
-from apps.categories.models import Category
+from apps.usercategories.models import Category
 
 
 class UserFeed(Model):
+    default_base_feed_category_name = 'default'
+
     feed = ForeignKey(Feed)
     user = ForeignKey(User)
-    categories = ManyToManyField(Category)
+    categories = ManyToManyField(Category, null=True)
     # the user given name can differ from the original name
     name = CharField(max_length=255, null=True)
 

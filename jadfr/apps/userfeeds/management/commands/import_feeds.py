@@ -1,7 +1,8 @@
-from apps.categories.models import Category
-from apps.feeds.models import UserFeed
+from apps.usercategories.models import Category
+from apps.userfeeds.models import UserFeed
 from django.contrib.auth.models import User
 from feeds.models import Feed
+from feeds.models import Category as BaseFeedCategory
 import opml
 
 __author__ = 'j_schn14'
@@ -35,14 +36,14 @@ class Command(BaseCommand):
         self.save(data, dry_run=dry_run)
 
     def set_user(self, user):
-        self.user = User.objects.get(name=user)
+        self.user = User.objects.get(username=user)
 
     def parse_file(self, file_name):
         outline = opml.parse(file_name)
         return self.get_feeds_from_outline(outline)
 
     def get_feeds_from_outline(self, outline):
-        result = CategoryInfo(name=outline.title)
+        result = CategoryInfo(outline.title)
         for o in outline:
             values = o._root.find('[@xmlUrl]')
             if values is not None:
@@ -59,7 +60,8 @@ class Command(BaseCommand):
 
     def save(self, data, dry_run=False):
         for item in data:
-            if isinstance(FeedInfo, item):
+            print "Saving %s" % item
+            if isinstance(item, FeedInfo):
                 save_func = self._save_feed
             else:
                 save_func = self._save_category
@@ -68,17 +70,18 @@ class Command(BaseCommand):
     def _save_feed(self, feed_item, dry_run):
         try:
             feed = Feed.objects.get(feed_url=feed_item.feed_url, url=feed_item.html_url)
-        except Feed.DoesNotExists:
+        except Feed.DoesNotExist:
             feed = Feed(
                 feed_url=feed_item.feed_url,
                 url=feed_item.html_url,
-                name=feed_item.title
+                name=feed_item.title,
+                category=BaseFeedCategory.objects.get(name=UserFeed.default_base_feed_category_name)
             )
             if not dry_run:
                 feed.save()
         try:
             user_feed = UserFeed.objects.get(feed=feed, user=self.user)
-        except UserFeed.DoesNotExists:
+        except UserFeed.DoesNotExist:
             user_feed = UserFeed.objects.create(
                 feed=feed,
                 user=self.user
@@ -89,7 +92,7 @@ class Command(BaseCommand):
             user_feed.save()
 
     def _save_category(self, category_item, dry_run):
-        if not Category.objects.get(name=category_item.name).exists():
+        if not Category.objects.filter(name=category_item.name).exists():
             category = Category(name=category_item.name)
             if not dry_run:
                 category.save()
@@ -97,8 +100,8 @@ class Command(BaseCommand):
 
 
 class FeedInfo(object):
-    def __int__(self,
-                feed_type,
+    def __init__(self,
+                 feed_type,
                 feed_url,
                 html_url,
                 title,
@@ -110,12 +113,34 @@ class FeedInfo(object):
         self.title = title
         self.category = category
 
+    def __str__(self):
+        return self.title
 
-class CategoryInfo(set):
-    name = ''
 
-    def __int__(self, name, **kwargs):
+class CategoryInfo(object):
+    class CategoryInfoIter(object):
+
+        def __init__(self, category_info):
+            self._items = category_info._items
+
+        def next(self):
+            if not hasattr(self, '_iter'):
+                self._iter = iter(self._items)
+            return self._iter.next()
+
+    def __init__(self, name, items=[]):
         super(CategoryInfo, self).__init__()
         self.name = name
-        if 'items' in kwargs:
-            self.add(item for item in kwargs['items'])
+        self._items = set()
+        for item in items:
+            self._items.add(item)
+
+    def __iter__(self):
+        return CategoryInfo.CategoryInfoIter(self)
+
+
+    def add(self, item):
+        self._items.add(item)
+
+    def __str__(self):
+        return self.name

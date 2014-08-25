@@ -1,4 +1,4 @@
-from apps.feeds.models import UserFeed
+from apps.userfeeds.models import UserFeed
 from feeds.models import Feed
 
 __author__ = 'j_schn14'
