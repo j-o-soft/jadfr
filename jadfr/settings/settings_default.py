@@ -42,8 +42,8 @@ INSTALLED_APPS = (
     'south',
     'feeds',
     'mptt',
-    'apps.userfeeds',
-    'apps.usercategories'
+    'apps.usercategories',
+    'apps.userfeeds'
 )
 
 MIDDLEWARE_CLASSES = (
