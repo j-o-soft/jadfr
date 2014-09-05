@@ -1,5 +1,5 @@
 # Require any additional compass plugins here.
-require 'compass-normalize'
+#require 'compass-normalize'
 require 'bootstrap-sass'
 
 # Set this to the root of your project when deployed:
@@ -19,7 +19,7 @@ output_style = (environment == :production) ? :compressed : :expanded
 relative_assets = true
 
 # To disable debugging comments that display the original location of your selectors. Uncomment:
-# line_comments = false
+line_comments = true
 
 # If you prefer the indented syntax, you might want to regenerate this
 # project again passing --syntax sass, or you can uncomment this:

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Project description",
   "main": "Gruntfile.coffee",
+  "private": true,
   "directories": {
     "doc": "docs"
   },
@@ -31,7 +32,7 @@
     "JavaScript",
     "Editor"
   ],
-  "author": "Henning Kage <henning.kage@gmail.com>",
+  "author": "Johannes Schneider",
   "license": "MIT",
   "dependencies": {
     "bower": "~1.3.8"
