@@ -1,7 +1,7 @@
 import os
 
 from configurations import Configuration
-from jadfr import environment
+import environment
 
 location = lambda x: os.path.abspath(
     os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../', x))
@@ -18,8 +18,9 @@ def never_show_debug_toolbar(request):
 class Base(Configuration):
 
     ENVIRONMENT = os.getenv('DJANGO_ENVIRONMENT') or environment.PRODUCTION
-
-    SECRET_KEY = 'abc123'
+    BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = '=2j_rpzp0#03(pv19-xefur2-pn0_f3&4klli%ng&__mnthyco'
 
     ADMINS = (
         ('Webmaster', 'webmaster@example.com'),
@@ -98,10 +99,9 @@ class Base(Configuration):
         'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     )
 
-    ROOT_URLCONF = 'jadfr.urls'
+    ROOT_URLCONF = 'feedreader.urls'
 
-    # Python dotted path to the WSGI application used by Django's runserver.
-    WSGI_APPLICATION = 'jadfr.wsgi.application'
+    WSGI_APPLICATION = 'feedreader.wsgi.application'
 
     TEMPLATE_CONTEXT_PROCESSORS = (
         "django.contrib.auth.context_processors.auth",
@@ -118,7 +118,7 @@ class Base(Configuration):
         # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
         # Always use forward slashes, even on Windows.
         # Don't forget to use absolute paths, not relative paths.
-        location('templates'),
+        (os.path.join(BASE_DIR, '../../templates'),)
     )
 
     AUTHENTICATION_BACKENDS = (
@@ -136,19 +136,17 @@ class Base(Configuration):
     USE_CACHE_FOR_HAWK_NONCE = False  # re-write would do no harm to us
 
     INSTALLED_APPS = [
+        'django.contrib.admin',
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sessions',
-        'django.contrib.sites',
         'django.contrib.messages',
         'django.contrib.staticfiles',
-        'django.contrib.flatpages',
-        # Uncomment the next line to enable the admin:
-        'django.contrib.admin',
-        # Uncomment the next line to enable admin documentation:
-        'django.contrib.admindocs',
-        'south',
-        #'compressor',
+        'rest_framework',
+        'djangofeeds',
+        'mptt',
+        'apps.usercategories',
+        'apps.userfeeds'
     ]
 
     # A sample logging configuration. The only tangible logging
@@ -180,10 +178,10 @@ class Base(Configuration):
                 'class': 'logging.StreamHandler',
                 'formatter': 'simple'
             },
-            'sentry': {
-                'level': 'WARNING',
-                'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-            },
+            # 'sentry': {
+            #                'level': 'WARNING',
+            #                'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+            #            },
         },
         'loggers': {
             'django.request': {
@@ -202,8 +200,6 @@ class Base(Configuration):
         }
     }
 
-    # Do not run migrations for normal test execution
-    SOUTH_TESTS_MIGRATE = False
 
     BASE_URL = 'http://example.com'
 
@@ -218,10 +214,36 @@ class Base(Configuration):
         }
     }
 
+    BROKER_URL = 'Add some broker here'
     CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
     CELERY_TIMEZONE = 'UTC'
     CELERY_ENABLE_UTC = True
     CELERY_DISABLE_RATE_LIMITS = True
+
+    LANGUAGE_CODE = 'en-us'
+
+    TIME_ZONE = 'UTC'
+
+    USE_I18N = True
+
+    USE_L10N = True
+
+    USE_TZ = True
+
+    REST_FRAMEWORK = {
+        # Use hyperlinked styles by default.
+        # Only used if the `serializer_class` attribute is not set on a view.
+        'DEFAULT_MODEL_SERIALIZER_CLASS':
+            'rest_framework.serializers.HyperlinkedModelSerializer',
+
+        # Use Django's standard `django.contrib.auth` permissions,
+        # or allow read-only access for unauthenticated users.
+
+        # todo use hawk hre
+        'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        ]
+    }
 
 
 class Dev(Base):

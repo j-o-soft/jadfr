@@ -3,10 +3,11 @@
 # Django
 
 # installed via apt
-#Django>=1.6,<=1.7
+Django==1.7
 django-configurations
 djangorestframework
 django-filter>=0.5.4
+django-celery
 
 #installed via apt
 #South>=1.0,<=1.1
@@ -16,7 +17,8 @@ fabric
 
 
 Werkzeug==0.9.6
-git+https://github.com/dmartin1/django-feeds.git@f7921ffeaebf07e42564a6417a79eb4520b5bfaf#egg=django_feeds-master
-opml
-opml=0.5
+git+https:https://github.com/jo-soft/django-feeds.git
+opml==0.5
 django-mptt
+psycopg2
+redis

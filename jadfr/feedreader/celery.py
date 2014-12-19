@@ -2,14 +2,19 @@ from __future__ import absolute_import
 import os
 
 
-import ipdb; ipdb.set_trace()
 from celery import Celery
 
 
 from django.conf import settings
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'jadfr.settings')
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "feedreader.conf.settings")
+os.environ.setdefault('DJANGO_CONFIGURATION', 'MyConf')
+
+from configurations import importer
+
+importer.install()
 
 app = Celery('jadfr')
 
