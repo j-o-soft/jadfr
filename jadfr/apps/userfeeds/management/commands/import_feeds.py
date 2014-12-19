@@ -1,15 +1,16 @@
 from apps.usercategories.models import Category
 from apps.userfeeds.models import UserFeed
 from django.contrib.auth.models import User
-from feeds.models import Feed
-from feeds.models import Category as BaseFeedCategory
+from djangofeeds.models import Feed
+from djangofeeds.models import Category as BaseFeedCategory
+from django.core.management.base import BaseCommand
+from optparse import make_option
+
+import logging
 import opml
 
 __author__ = 'j_schn14'
-
-from optparse import make_option
-
-from django.core.management.base import BaseCommand
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -25,24 +26,39 @@ class Command(BaseCommand):
         self.user = None
 
     def handle(self, *args, **options):
-
+        """
+        reads feed information from opml file and stores them in the database
+        """
+        self.verbose = options.get('verbose')
         user = options.get('user')
         file_name = options.get('filename')
-        verbose = options.get('verbose')
         dry_run = options.get('dry_run')
 
+        # if a user is give, select it from the db
         self.set_user(user)
+        # read the data from file
         data = self.parse_file(file_name)
+        # store it to the databaase
         self.save(data, dry_run=dry_run)
 
     def set_user(self, user):
         self.user = User.objects.get(username=user)
 
     def parse_file(self, file_name):
+        """
+        creates nested structure of feedInfos and feedcategories from the ompl file
+        :param file_name: the file to pare
+        :return: a FeedInfo Object containing all Information from the file
+        """
         outline = opml.parse(file_name)
         return self.get_feeds_from_outline(outline)
 
     def get_feeds_from_outline(self, outline):
+        """
+        helper function to create the nested feedInfo Object(s)
+        :param outline: parsed opml file (or node inside it)
+        :return: a FeedInfo object for the data below the node
+        """
         result = CategoryInfo(outline.title)
         for o in outline:
             values = o._root.find('[@xmlUrl]')
@@ -59,26 +75,32 @@ class Command(BaseCommand):
         return result
 
     def save(self, data, dry_run=False):
+        """
+        saves the Information from a FeedInfo object to the database
+        :param data: Items to save FeedInfoObject
+        :param dry_run: if false, no db operations is performed
+        """
         for item in data:
             print "Saving %s" % item
             if isinstance(item, FeedInfo):
                 save_func = self._save_feed
             else:
                 save_func = self._save_category
+            if self.verbose:
+                logger.debug('Saving %s' % item)
             save_func(item, dry_run=dry_run)
 
     def _save_feed(self, feed_item, dry_run):
         try:
-            feed = Feed.objects.get(feed_url=feed_item.feed_url, url=feed_item.html_url)
+            feed = Feed.objects.get(feed_url=feed_item.feed_url)
         except Feed.DoesNotExist:
             feed = Feed(
                 feed_url=feed_item.feed_url,
-                url=feed_item.html_url,
-                name=feed_item.title,
-                category=BaseFeedCategory.objects.get(name=UserFeed.default_base_feed_category_name)
+                name=feed_item.title
             )
             if not dry_run:
                 feed.save()
+                feed.categories.add(BaseFeedCategory.objects.get(name=UserFeed.default_base_feed_category_name))
         try:
             user_feed = UserFeed.objects.get(feed=feed, user=self.user)
         except UserFeed.DoesNotExist:
@@ -137,7 +159,6 @@ class CategoryInfo(object):
 
     def __iter__(self):
         return CategoryInfo.CategoryInfoIter(self)
-
 
     def add(self, item):
         self._items.add(item)

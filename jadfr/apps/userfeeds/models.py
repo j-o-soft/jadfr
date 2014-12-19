@@ -2,7 +2,7 @@ __author__ = 'j_schn14'
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Model, ForeignKey, IntegerField, ManyToManyField, CharField, BooleanField
-from feeds.models import Entry, Feed
+from djangofeeds.models import Post, Feed
 
 from apps.usercategories.models import Category
 
@@ -39,7 +39,7 @@ class UserFeedEntry(Model):
     )
 
     feed = ForeignKey(UserFeed)
-    entry = ForeignKey(Entry)
+    entry = ForeignKey(Post)
     status = IntegerField(choices=Feed_Entry_Choices, default=ENTRY_NEW_VAL)
     rank = IntegerField(null=False, blank=False, default=0)
 
