@@ -194,7 +194,7 @@ class Base(Configuration):
                 'handlers': ['console'],
             },
             'apps': {
-                'level': 'WARNING',
+                'level': 'DEBUG',
                 'handlers': ['console'],
             },
         }
@@ -254,9 +254,9 @@ class Dev(Base):
     INSTALLED_APPS = Base.INSTALLED_APPS + [
         'debug_toolbar',
     ]
-    MIDDLEWARE_CLASSES = (
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    ) + Base.MIDDLEWARE_CLASSES
+#    MIDDLEWARE_CLASSES = (
+#        'debug_toolbar.middleware.DebugToolbarMiddleware',
+#    ) + Base.MIDDLEWARE_CLASSES
     DEBUG_TOOLBAR_PATCH_SETTINGS = False
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_TOOLBAR_CALLBACK': 'jadfr.conf.base.never_show_debug_toolbar',
