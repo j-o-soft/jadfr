@@ -1,3 +1,12 @@
+# cache
+.sass-cache
+
+# tools installed by node
+node_modules
+
+# stuff installed by bower
+bower_components
+
 #virtualenv
 venv
 

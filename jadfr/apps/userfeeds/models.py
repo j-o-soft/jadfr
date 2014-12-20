@@ -10,8 +10,8 @@ from apps.usercategories.models import Category
 class UserFeed(Model):
     default_base_feed_category_name = 'default'
 
-    feed = ForeignKey(Feed)
     user = ForeignKey(User)
+    feed = ForeignKey(Feed)
     categories = ManyToManyField(Category, null=True)
     # the user given name can differ from the original name
     name = CharField(max_length=255, null=True)
@@ -43,10 +43,7 @@ class UserFeedEntry(Model):
     status = IntegerField(choices=Feed_Entry_Choices, default=ENTRY_NEW_VAL)
     rank = IntegerField(null=False, blank=False, default=0)
 
-    def update_rank(self):
-        """
-        TODO: implement an rank function to order entries
-        the rank function should depend on the date, number of time other users read this entry
-        and the number of times the user read entries in the same category the feed belongs to.
-        """
-        pass
+    class Meta:
+        unique_together = ('feed', 'entry')
+
+from . import receivers
