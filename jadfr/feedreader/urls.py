@@ -1,3 +1,4 @@
+from api import urls as api_urls
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
@@ -10,8 +11,8 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     url(r'^$', IndexView.as_view(), name='home'),
-    url(r'^admin/', include(admin.site.urls)),
-    #    url(r'^login/$', login, {'template_name': 'account/login.html'}),
+    url(r'^admin/$', include(admin.site.urls)),
+    url(r'^api/', include(api_urls))
 )
 
 if settings.DEBUG:

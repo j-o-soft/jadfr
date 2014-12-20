@@ -96,7 +96,6 @@ class Base(Configuration):
         'django.contrib.messages.middleware.MessageMiddleware',
         # Uncomment the next line for simple clickjacking protection:
         # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-        'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     )
 
     ROOT_URLCONF = 'feedreader.urls'
@@ -118,7 +117,7 @@ class Base(Configuration):
         # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
         # Always use forward slashes, even on Windows.
         # Don't forget to use absolute paths, not relative paths.
-        (os.path.join(BASE_DIR, '../../templates'),)
+        (os.path.join(BASE_DIR, '../templates'),)
     )
 
     AUTHENTICATION_BACKENDS = (
@@ -241,8 +240,9 @@ class Base(Configuration):
 
         # todo use hawk hre
         'DEFAULT_PERMISSION_CLASSES': [
-            'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-        ]
+            'rest_framework.permissions.IsAuthenticated',
+        ],
+        'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.BasicAuthentication',)
     }
 
 

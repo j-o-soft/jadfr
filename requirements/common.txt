@@ -5,7 +5,7 @@
 # installed via apt
 Django==1.7
 django-configurations
-djangorestframework
+djangorestframework>=3.0.0
 django-filter>=0.5.4
 django-celery
 

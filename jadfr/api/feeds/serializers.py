@@ -1,7 +1,6 @@
 from apps.userfeeds.models import UserFeed
-from feeds.models import Feed
+from djangofeeds.models import Feed
 
-__author__ = 'j_schn14'
 from rest_framework import serializers
 
 
@@ -12,6 +11,16 @@ class FeedSerializer(serializers.ModelSerializer):
 
 
 class UserFeedSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+
     class Meta:
         model = UserFeed
-        fields = ('id', 'feed', 'category')
+        fields = ('id', 'feed', 'name', 'categories')
+
+    def get_name(self, obj):
+        """
+        returns a feeds name if present otherwise the name of the base feed.
+        :param obj: a Userfeedobject.
+        :return: a feeds name
+        """
+        return obj.name or obj.feed.name
