@@ -4,7 +4,6 @@ from feedreader.conf.base import Dev, Test
 class MyConf(Dev):
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'jadfr',
             'USER': 'postgres',
             'PASSWORD': 's0melongTestingPassw0rd',
@@ -17,4 +16,5 @@ class MyConf(Dev):
 
 
 class MyTestConf(Test):
-    pass
+    INSTALLED_APPS = Test.INSTALLED_APPS + ['django_behave']
+    TEST_RUNNER = 'django_behave.runner.DjangoBehaveTestSuiteRunner'
