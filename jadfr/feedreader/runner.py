@@ -3,7 +3,7 @@ from django_behave.runner import DjangoBehaveTestCase, DjangoBehaveTestSuiteRunn
 
 class FirefoxTestCase(DjangoBehaveTestCase):
     def get_browser(self):
-        return webdriver.Firefox()
+        return self.webdriver.Firefox()
 
 
 class FirefoxeRunner(DjangoBehaveTestSuiteRunner):

@@ -16,5 +16,4 @@ class MyConf(Dev):
 
 
 class MyTestConf(Test):
-    INSTALLED_APPS = Test.INSTALLED_APPS + ['django_behave']
-    TEST_RUNNER = 'django_behave.runner.DjangoBehaveTestSuiteRunner'
+    pass

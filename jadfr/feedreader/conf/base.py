@@ -266,6 +266,8 @@ class Dev(Base):
 class Test(Base):
     """Settings for testing."""
     ENVIRONMENT = os.getenv('DJANGO_ENVIRONMENT') or environment.TESTING
+    INSTALLED_APPS = Test.INSTALLED_APPS + ['django_behave']
+    TEST_RUNNER = 'django_behave.runner.DjangoBehaveTestSuiteRunner'
 
 
 class Staging(Base):
