@@ -2,7 +2,7 @@
 .sass-cache
 
 # tools installed by node
-node_modules
+node_modules/
 
 # stuff installed by bower
 bower_components
