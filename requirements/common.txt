@@ -17,7 +17,7 @@ fabric
 
 
 Werkzeug==0.9.6
-git+https:https://github.com/jo-soft/django-feeds.git
+git+https://git@github.com/jo-soft/django-feeds.git
 opml==0.5
 django-mptt
 psycopg2
