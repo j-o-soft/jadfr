@@ -68,8 +68,9 @@
       <outline type="rss" title="Securelist - English - Global - securelist.com" text="Securelist - English - Global - securelist.com" version="RSS" fz:quickMode="false" xmlUrl="https://securelist.com/feed/" htmlUrl="https://securelist.com"/>
       <outline type="rss" title="vizZzion.org :: sebas' blog" text="vizZzion.org :: sebas' blog" version="RSS" fz:quickMode="false" xmlUrl="http://vizzzion.org/blog/feed/" htmlUrl="http://vizZzion.org/blog"/>
       <outline type="rss" title="OkTrends" text="OkTrends" version="RSS" fz:quickMode="false" xmlUrl="http://blog.okcupid.com/index.php/feed/" htmlUrl="http://blog.okcupid.com"/></outline>
-    <outline title="Intern">
-      <outline type="rss" title=" journal atom feed" text=" journal atom feed" version="RSS" fz:quickMode="false" xmlUrl="http://code.intern.galileo-press.de/rhodecode/_admin/journal/atom?api_key=54295d26aca63e038bf7e9d5c7144821add699ba" htmlUrl="http://code.intern.galileo-press.de/rhodecode/_admin/journal/atom"/>
-      <outline type="rss" title="galileox feed" text="galileox feed" version="RSS" fz:quickMode="false" xmlUrl="http://code.intern.galileo-press.de/rhodecode/galileox/feed/atom?api_key=54295d26aca63e038bf7e9d5c7144821add699ba" htmlUrl="http://code.intern.galileo-press.de/rhodecode/galileox"/></outline>
+      <outline type="rss" title="Christopher Hunt on Software Development" text="Christopher Hunt on Software Development" version="RSS" fz:quickMode="false"
+	       xmlUrl="http://christopherhunt-software.blogspot.com/feeds/posts/default" htmlUrl="http://blog.okcupid.com"/></outline>
+      <outline type="rss" title="lynxx-blog" text="Medien, Naher Osten, Türkei, Osmanisches Reich, Islam, Orientalistik" version="RSS" fz:quickMode="false"
+	       xmlUrl="http://lynxx-blog.blogspot.com/feeds/posts/default" htmlUrl="http://lynxx-blog.blogspot.com"/></outline>
   </body>
 </opml>
