@@ -107,6 +107,10 @@ module.exports = (grunt) ->
                 cwd: '<%= app.paths.base %>'
                 command: 'python manage.py collectstatic --noinput'
 
+            manage_py_test:
+                cwd: '<%= app.paths.base %>'
+                command: 'DJANGO_CONFIGURATION=MyTestConf python manage.py  test'
+
 
         jsonlint:
             bower:
@@ -241,3 +245,8 @@ module.exports = (grunt) ->
         grunt.task.run 'replace:projectname'
 
     @registerTask 'default', ['dev']
+
+    @registerTask 'test', 'builds the environment and executes ./manage.py test', [
+     'build',
+     'exec'
+    ]
