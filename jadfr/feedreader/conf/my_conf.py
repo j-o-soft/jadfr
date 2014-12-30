@@ -9,4 +9,4 @@ except ImportError:
 try:
     from settings_local import MyTestConf
 except ImportError:
-    from feedreader.conf.base import Dev as MyTestConf
+    from feedreader.conf.base import Test as MyTestConf
