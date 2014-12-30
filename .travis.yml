@@ -4,14 +4,14 @@ python:
   - "2.7"
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 before_install:
-    - sudo apt-get install libzmq3-dev libavahi-compat-libdnssd-dev ruby2.0
-    - gem install bundler
-    - npm install 1 -g grunt-cli
-    - npm install
+    - sudo apt-get install libzmq3-dev libavahi-compat-libdnssd-dev
+    - sudo gem install bundler
+    - sudo npm install -g grunt-cli
 
 install:
-    - pip install -r requirements/test.txt
+    - npm install
     - grunt install
+    - pip install -r requirements/test.txt
 
 # command to run tests, e.g. python setup.py test
 script:  grunt test
