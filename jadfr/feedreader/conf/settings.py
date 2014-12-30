@@ -8,6 +8,3 @@ try:
     from my_conf import MyTestConf
 except ImportError:
     from base import Test as MyTestConf
-
-
-

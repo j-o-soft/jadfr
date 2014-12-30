@@ -20,3 +20,4 @@ pytest-django
 pytest-pep8
 pytest-cov
 tox
+pep8
