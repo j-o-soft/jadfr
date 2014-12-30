@@ -6,7 +6,7 @@ python:
 before_install:
     - sudo apt-get install libzmq3-dev libavahi-compat-libdnssd-dev
     - gem install bundler
-    - sudo npm install -g grunt-cli
+    - npm install -g grunt-cli
 
 install:
     - npm install
