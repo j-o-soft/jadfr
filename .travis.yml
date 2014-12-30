@@ -3,11 +3,14 @@ python:
 #  - "3.3" will be nice in future
   - "2.7"
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+before_install:
+    - gem install bundler
+    - npm install 1 -g grunt-cli
+    - npm install
+
 install:
     - pip install -r requirements/test.txt
-    - gem install bundler
-    - npm install -g grunt-cli
-    - npm install
     - grunt install
+    
 # command to run tests, e.g. python setup.py test
 script:  grunt test
