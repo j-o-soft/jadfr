@@ -244,9 +244,9 @@ module.exports = (grunt) ->
         grunt.config.set('replace.project', name)
         grunt.task.run 'replace:projectname'
 
-    @registerTask 'default', ['dev']
-
     @registerTask 'test', 'builds the environment and executes ./manage.py test', [
-     'build',
-     'exec'
+     #'build',
+     'exec:manage_py_test'
     ]
+
+    @registerTask 'default', ['dev']
