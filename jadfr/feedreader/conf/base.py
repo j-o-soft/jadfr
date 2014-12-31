@@ -265,6 +265,12 @@ class Dev(Base):
 class Test(Base):
     """Settings for testing."""
     ENVIRONMENT = os.getenv('DJANGO_ENVIRONMENT') or environment.TESTING
+
+
+class CompleteTest(Test):
+    """
+    Settings for testing incl. ui tests.
+    """
     INSTALLED_APPS = Base.INSTALLED_APPS + ['django_behave']
     TEST_RUNNER = 'django_behave.runner.DjangoBehaveTestSuiteRunner'
 
