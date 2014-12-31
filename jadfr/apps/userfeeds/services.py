@@ -8,24 +8,23 @@ from djangofeeds.models import Category as BaseFeedCategory
 
 class FeedWriteService(object):
 
-    def __init__(self, logger=None, dry_run=False):
+    def __init__(self, user, logger=None, dry_run=False):
         self.logger = logger or logging.getLogger(__name__)
         self.dry_run = dry_run
+        self.user = user
 
     def rsave(self, data):
         """
         saves the Information of a FeedInfo object recursively  to the database
         :param data: Items to save FeedInfoObject
-        :param dry_run: if false, no db operations is performed
         """
         for item in data:
             if isinstance(item, FeedInfo):
                 save_func = self.save_feed
             else:
                 save_func = self.save_category
-            if self.verbose:
                 self.logger.info("Saving %s", item)
-            save_func(item, dry_run=self.dry_run)
+            save_func(item)
 
     def save_feed(self, feed_item):
         try:
@@ -55,7 +54,7 @@ class FeedWriteService(object):
             category = Category(name=category_item.name)
             if not self.dry_run:
                 category.save()
-        self.save(category_item)
+        self.rsave(category_item)
 
 
 class FeedInfo(object):

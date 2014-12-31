@@ -47,7 +47,7 @@ class Worker(object):
         self.verbose = verbose
         if user_name:
             self.user = User.objects.get(username=user_name)
-        self.service_class = FeedWriteService(dry_run=self.dry_run, logger=logger)
+        self.service_class = FeedWriteService(user=self.user, dry_run=self.dry_run, logger=logger,)
 
     def execute(self):
         # read the data from file
