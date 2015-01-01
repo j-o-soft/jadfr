@@ -67,10 +67,9 @@
       <outline type="rss" title="Dr. Dobb's Articles" text="Dr. Dobb's Articles" version="RSS" fz:quickMode="false" xmlUrl="http://www.drdobbs.com/articles/rss" htmlUrl="http://www.drdobbs.com/"/>
       <outline type="rss" title="Securelist - English - Global - securelist.com" text="Securelist - English - Global - securelist.com" version="RSS" fz:quickMode="false" xmlUrl="https://securelist.com/feed/" htmlUrl="https://securelist.com"/>
       <outline type="rss" title="vizZzion.org :: sebas' blog" text="vizZzion.org :: sebas' blog" version="RSS" fz:quickMode="false" xmlUrl="http://vizzzion.org/blog/feed/" htmlUrl="http://vizZzion.org/blog"/>
-      <outline type="rss" title="OkTrends" text="OkTrends" version="RSS" fz:quickMode="false" xmlUrl="http://blog.okcupid.com/index.php/feed/" htmlUrl="http://blog.okcupid.com"/></outline>
-      <outline type="rss" title="Christopher Hunt on Software Development" text="Christopher Hunt on Software Development" version="RSS" fz:quickMode="false"
-	       xmlUrl="http://christopherhunt-software.blogspot.com/feeds/posts/default" htmlUrl="http://blog.okcupid.com"/></outline>
-      <outline type="rss" title="lynxx-blog" text="Medien, Naher Osten, Türkei, Osmanisches Reich, Islam, Orientalistik" version="RSS" fz:quickMode="false"
-	       xmlUrl="http://lynxx-blog.blogspot.com/feeds/posts/default" htmlUrl="http://lynxx-blog.blogspot.com"/></outline>
+      <outline type="rss" title="OkTrends" text="OkTrends" version="RSS" fz:quickMode="false" xmlUrl="http://blog.okcupid.com/index.php/feed/" htmlUrl="http://blog.okcupid.com"/>
+      <outline type="rss" title="Christopher Hunt on Software Development" text="Christopher Hunt on Software Development" version="RSS" fz:quickMode="false" xmlUrl="http://christopherhunt-software.blogspot.com/feeds/posts/default" htmlUrl="http://blog.okcupid.com"/>
+      <outline type="rss" title="lynxx-blog" text="Medien, Naher Osten, Türkei, Osmanisches Reich, Islam, Orientalistik" version="RSS" fz:quickMode="false" xmlUrl="http://lynxx-blog.blogspot.com/feeds/posts/default" htmlUrl="http://lynxx-blog.blogspot.com"/>
+      </outline>
   </body>
 </opml>
