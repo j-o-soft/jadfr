@@ -15,7 +15,7 @@ django-celery
 # Deployment
 fabric
 
-
+feedreader2
 Werkzeug==0.9.6
 git+https://git@github.com/jo-soft/django-feeds.git
 opml==0.5

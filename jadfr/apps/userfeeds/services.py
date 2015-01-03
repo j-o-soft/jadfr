@@ -1,6 +1,7 @@
-from apps.usercategories.models import Category
 from apps.userfeeds.models import UserFeed
 
+import feedfinder2
+import feedparser
 import logging
 from djangofeeds.models import Feed
 from djangofeeds.models import Category as BaseFeedCategory
@@ -12,6 +13,9 @@ class FeedWriteService(object):
         self.logger = logger or logging.getLogger(__name__)
         self.dry_run = dry_run
         self.user = user
+
+    def save(self, data):
+        return self.rsave([data])
 
     def rsave(self, data):
         """
@@ -30,12 +34,14 @@ class FeedWriteService(object):
         try:
             feed = Feed.objects.get(feed_url=feed_item.feed_url)
         except Feed.DoesNotExist:
+            self.logger.info("Feed %s does not exist.", feed_item.feed_url)
             feed = Feed(
                 feed_url=feed_item.feed_url,
                 name=feed_item.title
             )
             if not self.dry_run:
                 feed.save()
+                self.logger('Feed saved')
                 feed.categories.add(BaseFeedCategory.objects.get(name=UserFeed.default_base_feed_category_name))
         try:
             user_feed = UserFeed.objects.get(feed=feed, user=self.user)
@@ -44,10 +50,12 @@ class FeedWriteService(object):
                 feed=feed,
                 user=self.user
             )
-        feed_category = Category.objects.get(name=feed_item.category.name)
-        user_feed.categories.add(feed_category)
-        if not self.dry_run:
-            user_feed.save()
+            self.logger.info('User feed %s created for %s', feed_item.feed_url, self.user)
+        if feed_item.category:
+            feed_category = Category.objects.get(name=feed_item.category.name)
+            user_feed.categories.add(feed_category)
+            if not self.dry_run:
+                user_feed.save()
 
     def save_category(self, category_item):
         if not Category.objects.filter(name=category_item.name).exists():
@@ -60,11 +68,11 @@ class FeedWriteService(object):
 class FeedInfo(object):
     def __init__(self,
                  feed_type,
-                feed_url,
-                html_url,
-                title,
-                category
-    ):
+                 feed_url,
+                 html_url,
+                 title,
+                 category=None
+                 ):
         self.feed_type = feed_type
         self.feed_url = feed_url
         self.html_url = html_url
@@ -101,3 +109,28 @@ class CategoryInfo(object):
 
     def __str__(self):
         return self.name
+
+
+class FeedInformationService(object):
+
+    parse_exception_key = 'bozo_exception'
+
+    def __init__(self, feed_url, accept_fuzzy=False):
+        self.feed_url = feed_url
+        self.accept_fuzzt = accept_fuzzy
+
+    def parse(self):
+        parse_result = feedparser.parse(self.feed_url)
+        if self.accept_fuzzt and FeedInformationService.parse_exception_key in parse_result:
+            feeds = feedfinder2.find_feeds(self.feed_url)
+            parse_result = map(feedparser.parse, feeds)
+        else:
+            parse_result = [parse_result]
+
+        result = [FeedInfo(
+            feed_type=parsed_result['version'],
+            feed_url=parsed_result['href'],
+            html_url=parsed_result['feed']['link'],
+            title=parsed_result['feed']['title']
+            ) for parsed_result in parse_result]
+        return result
