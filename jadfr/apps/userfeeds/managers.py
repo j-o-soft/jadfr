@@ -1,4 +1,7 @@
 from django.db.models import manager, QuerySet, Model
+from logging import getLogger
+
+logger = getLogger(__name__)
 
 
 class CallbackManagerQuerySet(QuerySet):
@@ -23,9 +26,10 @@ class CallbackManagerQuerySet(QuerySet):
         """
         Sets the callback and call_kwargs for this queryset
         """
-        self.callback = callback
-        self.call_kwargs = call_kwargs.copy()
-        return self
+        clone = self._clone()
+        clone.callback = callback
+        clone.call_kwargs = call_kwargs.copy()
+        return clone
 
     def _clone(self, klass=None, setup=False, **kwargs):
         """
@@ -34,21 +38,19 @@ class CallbackManagerQuerySet(QuerySet):
         # because there happens a lot of stuff in _clone we don't overwrite it but we
         # set it after it's cloned
         val = super(CallbackManagerQuerySet, self)._clone(klass=klass, setup=setup, **kwargs)
-        val.callback = self.callback
-        val.call_kwargs = self.call_kwargs
+        if not klass or issubclass(klass, CallbackManagerQuerySet):
+            val.callback = self.callback
+            val.call_kwargs = self.call_kwargs
         return val
 
-    def __getitem__(self, k):
+    def _fetch_all(self):
         """
         get the item(s) and call the callback if necessary.
         """
-        res = super(CallbackManagerQuerySet, self).__getitem__(k)
+        super(CallbackManagerQuerySet, self)._fetch_all()
+        logger.debug('Callback: %s', self.callback)
         if self.callback:
-            if isinstance(res, Model):
-                self.callback(res, **self.call_kwargs)
-            else:
-                map(lambda item: self.callback(item, **self.call_kwargs), res)
-        return res
+            map(lambda item: self.callback(item, **self.call_kwargs), self._result_cache)
 
 
 class CallbackManager(manager.Manager):
@@ -74,9 +76,8 @@ class CallbackManager(manager.Manager):
         return self
 
     def qet_queryset(self):
-        qs = self._queryset_class(self.model,
-                                  using=self._db,
-                                  hints=self._hints,
-                                  callback=self.callback,
-                                  call_kwargs=self.call_kwargs)
-        return qs
+        return self._queryset_class(self.model,
+                                    using=self._db,
+                                    hints=self._hints,
+                                    callback=self.callback,
+                                    call_kwargs=self.call_kwargs)
