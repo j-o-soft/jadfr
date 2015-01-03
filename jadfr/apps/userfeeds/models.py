@@ -1,3 +1,5 @@
+from apps.userfeeds.managers import CallbackManager
+
 __author__ = 'j_schn14'
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
@@ -24,8 +26,8 @@ class UserFeed(Model):
 
 
 class UserFeedEntry(Model):
-    ENTRY_NEW_VAL = 0
-    ENTRY_MARKED_VAL = 1
+    ENTRY_MARKED_VAL = 0
+    ENTRY_NEW_VAL = 1
     ENTRY_UNREAD_VAL = 2
     ENTRY_SEEN_VAL = 3
     ENTRY_READ_VAL = 4
@@ -42,6 +44,7 @@ class UserFeedEntry(Model):
     entry = ForeignKey(Post)
     status = IntegerField(choices=Feed_Entry_Choices, default=ENTRY_NEW_VAL)
     rank = IntegerField(null=False, blank=False, default=0)
+    objects = CallbackManager()
 
     class Meta:
         unique_together = ('feed', 'entry')
