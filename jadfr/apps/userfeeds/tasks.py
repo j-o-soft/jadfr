@@ -1,10 +1,55 @@
 from apps.userfeeds.models import UserFeed, UserFeedEntry
+from apps.userfeeds.services import FeedWriteService, FeedInformationService
 from celery.canvas import group
 from djangofeeds.tasks import refresh_feed
 from logging import getLogger
 from feedreader.celery import app
 
 logger = getLogger(__name__)
+
+
+def update_feed_status(item, status):
+    update_feed_status_task.delay(item, status)
+
+
+def inc_entry_status(item):
+    """
+    sets the status to seen for new or unread items
+    """
+    logger.info('Status of %s == %s', item.pk, item.status)
+    if item.status in (UserFeedEntry.ENTRY_NEW_VAL, UserFeedEntry.ENTRY_UNREAD_VAL):
+        status = UserFeedEntry.ENTRY_SEEN_VAL
+        update_feed_status_task.delay(item, status)
+
+@app.task
+def update_feed_status_task(item, status):
+    item.status = status
+    item.save()
+    logger.info('Status of %s set to %s', item, status)
+
+
+def add_feeds(user, feedurls, fuzzy=True, dry_run=False):
+    write_task = write_feed_task.s(user=user,  dry_run=dry_run)
+    info_task = get_feed_info_from_url_task.s(fuzzy=fuzzy)
+
+    ((info_task | write_task).delay(feedurl) for feedurl in feedurls)
+
+
+def add_feed(user, feedurl, fuzzy=True, logger=logger, dry_run=False):
+    write_task = write_feed_task.s(user=user,  dry_run=dry_run)
+    info_task = get_feed_info_from_url_task.s(fuzzy=fuzzy)
+
+    (info_task | write_task).delay(feedurl)
+
+@app.task
+def write_feed_task(feed_info, user, dry_run, logger=logger):
+    feed_wrtier_serice = FeedWriteService(user, logger, dry_run)
+    return feed_wrtier_serice.rsave(feed_info)
+
+@app.task
+def get_feed_info_from_url_task(feed_url, fuzzy=False):
+    info_service = FeedInformationService(feed_url, accept_fuzzy=fuzzy)
+    return info_service.parse()
 
 
 def load_feeds(user=None):
