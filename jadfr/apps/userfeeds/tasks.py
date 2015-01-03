@@ -32,7 +32,7 @@ def add_feeds(user, feedurls, fuzzy=True, dry_run=False):
     write_task = write_feed_task.s(user=user,  dry_run=dry_run)
     info_task = get_feed_info_from_url_task.s(fuzzy=fuzzy)
 
-    ((info_task | write_task).delay(feedurl) for feedurl in feedurls)
+    group((info_task | write_task)(feedurl) for feedurl in feedurls).delay()
 
 
 def add_feed(user, feedurl, fuzzy=True, logger=logger, dry_run=False):
