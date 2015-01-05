@@ -5,3 +5,4 @@ splinter
 behave
 django-behave
 git+https://git@github.com/jo-soft/django-behave.git
+pep8
