@@ -7,4 +7,3 @@ urlpatterns = patterns(
     url(r'feed/', include(feeds_urls)),
     url(r'^category/', include(categories_urls))
 )
-

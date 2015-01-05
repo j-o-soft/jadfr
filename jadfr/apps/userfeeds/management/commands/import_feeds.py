@@ -41,7 +41,7 @@ class Command(BaseCommand):
 
 class Worker(object):
 
-    def __init__(self, user_name,file_name, dry_run=False, verbose=False):
+    def __init__(self, user_name, file_name, dry_run=False, verbose=False):
         self.dry_run = dry_run
         self.file_name = file_name
         self.verbose = verbose

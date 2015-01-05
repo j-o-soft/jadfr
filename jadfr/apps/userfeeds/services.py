@@ -1,3 +1,4 @@
+from apps.usercategories.models import Category
 from apps.userfeeds.models import UserFeed
 
 import feedfinder2
@@ -41,7 +42,7 @@ class FeedWriteService(object):
             )
             if not self.dry_run:
                 feed.save()
-                self.logger('Feed saved')
+                self.logger.info('Feed saved')
                 feed.categories.add(BaseFeedCategory.objects.get(name=UserFeed.default_base_feed_category_name))
         try:
             user_feed = UserFeed.objects.get(feed=feed, user=self.user)
@@ -131,6 +132,5 @@ class FeedInformationService(object):
             feed_type=parsed_result['version'],
             feed_url=parsed_result['href'],
             html_url=parsed_result['feed']['link'],
-            title=parsed_result['feed']['title']
-            ) for parsed_result in parse_result]
+            title=parsed_result['feed']['title']) for parsed_result in parse_result]
         return result

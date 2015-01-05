@@ -17,12 +17,12 @@ class ProxyModelSerializer(serializers.ModelSerializer):
     if it's a iterable the value of ``meta.raises`` is used. default of ``meta.raises``  is ``False``
     """
 
-
     @classmethod
     def _build_proxy_accessor(cls, field_name, proxy_item, raise_if_not_existent=False):
         """
         Build the getter methods for the proxied fields
         """
+
         def get_proxyied_value(obj):
             if raise_if_not_existent and not hasattr(obj, field_name):
                 raise AttributeError()
@@ -63,7 +63,6 @@ class ProxyModelSerializer(serializers.ModelSerializer):
 
 class RecursiveField(serializers.Serializer):
         def to_native(self, value):
-            import ipdb; ipdb.set_trace()
             return self.parent.to_native(value)
 
 

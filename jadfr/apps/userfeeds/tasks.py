@@ -21,6 +21,7 @@ def inc_entry_status(item):
         status = UserFeedEntry.ENTRY_SEEN_VAL
         update_feed_status_task.delay(item, status)
 
+
 @app.task
 def update_feed_status_task(item, status):
     item.status = status
@@ -29,22 +30,24 @@ def update_feed_status_task(item, status):
 
 
 def add_feeds(user, feedurls, fuzzy=True, dry_run=False):
-    write_task = write_feed_task.s(user=user,  dry_run=dry_run)
+    write_task = write_feed_task.s(user=user, dry_run=dry_run)
     info_task = get_feed_info_from_url_task.s(fuzzy=fuzzy)
 
     group((info_task | write_task)(feedurl) for feedurl in feedurls).delay()
 
 
 def add_feed(user, feedurl, fuzzy=True, logger=logger, dry_run=False):
-    write_task = write_feed_task.s(user=user,  dry_run=dry_run)
+    write_task = write_feed_task.s(user=user, dry_run=dry_run)
     info_task = get_feed_info_from_url_task.s(fuzzy=fuzzy)
 
     (info_task | write_task).delay(feedurl)
+
 
 @app.task
 def write_feed_task(feed_info, user, dry_run, logger=logger):
     feed_wrtier_serice = FeedWriteService(user, logger, dry_run)
     return feed_wrtier_serice.rsave(feed_info)
+
 
 @app.task
 def get_feed_info_from_url_task(feed_url, fuzzy=False):
@@ -95,6 +98,7 @@ def save_user_feed_entries_task(feed_entry):
     user_feeds = UserFeed.objects.filter(feed=base_feed)
     for item in user_feeds:
         save_user_feed_item_task.delay(user_feed=item, base_feed_entry=feed_entry)
+
 
 @app.task
 def save_user_feed_item_task(user_feed, base_feed_entry):
