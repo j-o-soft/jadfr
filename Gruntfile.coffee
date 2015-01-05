@@ -111,6 +111,11 @@ module.exports = (grunt) ->
                 cwd: '<%= app.paths.base %>'
                 command: 'DJANGO_CONFIGURATION=MyTestConf python manage.py  test'
 
+            pep8:
+                cwd: '<%= app.paths.base %>'
+                command: 'pep8 --ignore=E501 .'
+
+
 
         jsonlint:
             bower:
@@ -246,7 +251,8 @@ module.exports = (grunt) ->
 
     @registerTask 'test', 'builds the environment and executes ./manage.py test', [
      #'build',
-     'exec:manage_py_test'
+     'exec:manage_py_test',
+     'exec:pep8',
     ]
 
     @registerTask 'default', ['dev']
