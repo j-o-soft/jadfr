@@ -250,7 +250,7 @@ module.exports = (grunt) ->
         grunt.task.run 'replace:projectname'
 
     @registerTask 'test', 'builds the environment and executes ./manage.py test', [
-     #'build',
+     'build',
      'exec:manage_py_test',
      'exec:pep8',
     ]

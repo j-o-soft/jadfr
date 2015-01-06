@@ -10,6 +10,7 @@ before_install:
 
 install:
     - npm install
+    - bundle install
     - grunt install
     - pip install -r requirements/test.txt
 
