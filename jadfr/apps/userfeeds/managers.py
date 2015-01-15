@@ -1,4 +1,4 @@
-from django.db.models import manager, QuerySet, Model
+from django.db.models import manager, QuerySet
 from logging import getLogger
 
 logger = getLogger(__name__)
@@ -43,14 +43,21 @@ class CallbackManagerQuerySet(QuerySet):
             val.call_kwargs = self.call_kwargs
         return val
 
-    def _fetch_all(self):
-        """
-        get the item(s) and call the callback if necessary.
-        """
-        super(CallbackManagerQuerySet, self)._fetch_all()
-        logger.debug('Callback: %s', self.callback)
+    def get(self, *args, **kwargs):
+        item = super(CallbackManagerQuerySet, self).get(*args, **kwargs)
         if self.callback:
-            map(lambda item: self.callback(item, **self.call_kwargs), self._result_cache)
+            logger.debug('Callback: %s', self.callback)
+            self.callback(item, **self.call_kwargs)
+        return item
+
+    def iterator(self):
+        base_iterator = super(CallbackManagerQuerySet, self).iterator()
+        items = (item for item in base_iterator)
+        for item in items:
+            if self.callback:
+                logger.debug('Callback: %s', self.callback)
+                self.callback(item, **self.call_kwargs)
+            yield item
 
 
 class CallbackManager(manager.Manager):
@@ -75,9 +82,11 @@ class CallbackManager(manager.Manager):
         self.call_kwargs = kwargs.copy()
         return self
 
-    def qet_queryset(self):
+    def get_queryset(self):
+        callback = getattr(self, 'callback', None)
+        call_kwargs = getattr(self, 'call_kwargs', None)
         return self._queryset_class(self.model,
                                     using=self._db,
                                     hints=self._hints,
-                                    callback=self.callback,
-                                    call_kwargs=self.call_kwargs)
+                                    callback=callback,
+                                    call_kwargs=call_kwargs)
