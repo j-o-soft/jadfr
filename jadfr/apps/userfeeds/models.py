@@ -45,6 +45,8 @@ class UserFeedEntry(Model):
     status = IntegerField(choices=Feed_Entry_Choices, default=ENTRY_NEW_VAL)
     rank = IntegerField(null=False, blank=False, default=0)
 
+    objects = CallbackManager()
+
     class Meta:
         unique_together = ('feed', 'entry')
 
