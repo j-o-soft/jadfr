@@ -56,4 +56,3 @@ class TestProxyModelSerializer(TestCase):
         stream = BytesIO(json)
         data = JSONParser().parse(stream)
         for field_name, value in data.iteritems():
-            assert getattr(m1, field_name) == value
