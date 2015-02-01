@@ -118,11 +118,11 @@ class FeedInformationService(object):
 
     def __init__(self, feed_url, accept_fuzzy=False):
         self.feed_url = feed_url
-        self.accept_fuzzt = accept_fuzzy
+        self.accept_fuzzy = accept_fuzzy
 
     def parse(self):
         parse_result = feedparser.parse(self.feed_url)
-        if self.accept_fuzzt and FeedInformationService.parse_exception_key in parse_result:
+        if self.accept_fuzzy and FeedInformationService.parse_exception_key in parse_result:
             feeds = feedfinder2.find_feeds(self.feed_url)
             parse_result = map(feedparser.parse, feeds)
         else:

@@ -84,7 +84,7 @@ def load_feed_task(feed):
 def save_user_feed_entries(feed_entry):
     """
     delegates the new feeds to all users which have this as userfeed
-    :param feed_entry: wich was updated
+    :param feed_entry: which was updated
     """
     save_user_feed_entries_task.delay(feed_entry)
 
