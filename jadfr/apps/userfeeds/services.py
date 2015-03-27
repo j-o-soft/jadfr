@@ -1,5 +1,4 @@
-from apps.usercategories.models import Category
-from apps.userfeeds.models import UserFeed
+from apps.userfeeds.models import UserFeed, UserCategory
 
 import feedfinder2
 import feedparser
@@ -53,14 +52,14 @@ class FeedWriteService(object):
             )
             self.logger.info('User feed %s created for %s', feed_item.feed_url, self.user)
         if feed_item.category:
-            feed_category = Category.objects.get(name=feed_item.category.name)
+            feed_category = UserCategory.objects.get(name=feed_item.category.name)
             user_feed.categories.add(feed_category)
             if not self.dry_run:
                 user_feed.save()
 
     def save_category(self, category_item):
-        if not Category.objects.filter(name=category_item.name).exists():
-            category = Category(name=category_item.name)
+        if not UserCategory.objects.filter(name=category_item.name).exists():
+            category = UserCategory(name=category_item.name)
             if not self.dry_run:
                 category.save()
         self.rsave(category_item)

@@ -21,7 +21,8 @@ module.exports = (grunt) ->
         bower:
             install:
                 options:
-                    copy: false
+                    targetDir: '<%= app.paths.bower %>'
+                    copy: true
                     cleanBowerDir: false
                     install: true
                     verbose: true
@@ -75,18 +76,17 @@ module.exports = (grunt) ->
                 files: [{
                     expand: true
                     flatten: true
-                    cwd: '<%= app.paths.bower %>',
+                    cwd: '<%= app.paths.bower %>'
                     src: [
                         'jquery/dist/jquery*.js',
                         'requirejs/require.js',
                         'requirejs-domready/domReady.js',
                         'requirejs-text/text.js',
-                        'holderjs/holder.js',
-                        'backbone/*.js',
-                        'underscore/*.js',
-                        'holderjs/*.js',
-                        'backbone.wreqr/lib/backbone.wreqr.*',
-                        'backbone.babysitter/lib/backbone.babysitter.*',
+                        'angularAMD/angularAMD.min.js',
+                        'angular/angular.js'
+                        'uikit/scss/uikit-mixins.scss'
+                        'uikit/scss/uikit.scss'
+                        'uikit/js/uikit.js'
                     ]
                     dest: '<%= app.paths.vendor %>'
                     filter: 'isFile'

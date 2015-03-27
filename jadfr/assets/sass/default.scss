@@ -1,2 +1,6 @@
-//@import "bootstrap-sprockets"
-@import "bootstrap.min.css"
+@import "uikit/scss/uikit-mixins.scss";
+
+// your custom code goes here, e.g. mixins, variables
+
+@import "uikit/scss/uikit.scss";
+@import "uikit/scss/components/autocomplete.scss";

@@ -1,6 +1,5 @@
 from collections import OrderedDict
-from apps.userfeeds.models import UserFeed, UserFeedEntry
-from apps.usercategories.models import Category
+from apps.userfeeds.models import UserFeed, UserFeedEntry, Category
 from djangofeeds.models import Feed
 
 from rest_framework import serializers
@@ -106,3 +105,9 @@ class UserFeedSerializer(serializers.ModelSerializer):
         :return: a feeds name
         """
         return obj.name or obj.feed.name
+
+
+class FeedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('id', 'name', 'parent')

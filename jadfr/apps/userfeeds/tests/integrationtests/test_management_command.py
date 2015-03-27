@@ -6,7 +6,7 @@ from mock import patch
 
 from apps.userfeeds.services import FeedWriteService, CategoryInfo, FeedInfo
 from apps.usercategories.models import Category
-from apps.userfeeds.models import UserFeed
+from apps.userfeeds.models import UserFeed, Category
 
 
 class ImportFeedBase(TestCase):

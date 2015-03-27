@@ -1,12 +1,21 @@
+__author__ = 'j_schn14'
+
 from apps.userfeeds.managers import CallbackManager
 
-__author__ = 'j_schn14'
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Model, ForeignKey, IntegerField, ManyToManyField, CharField, BooleanField
 from djangofeeds.models import Post, Feed
+from mptt.fields import TreeForeignKey
+from mptt.models import MPTTModel
 
-from apps.usercategories.models import Category
+
+class UserCategory(MPTTModel):
+    name = CharField(max_length=50, unique=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
 
 
 class UserFeed(Model):
@@ -14,7 +23,7 @@ class UserFeed(Model):
 
     user = ForeignKey(User)
     feed = ForeignKey(Feed)
-    categories = ManyToManyField(Category, null=True)
+    categories = ManyToManyField(UserCategory, null=True)
     # the user given name can differ from the original name
     name = CharField(max_length=255, null=True)
     active = BooleanField(default=True)

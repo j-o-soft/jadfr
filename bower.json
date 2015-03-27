@@ -1,5 +1,5 @@
 {
-  "name": "project",
+  "name": "jadfr",
   "version": "0.1.0",
   "license": "MIT",
   "private": true,
@@ -13,6 +13,8 @@
   "dependencies": {
     "jquery": "~2.1.0",
     "angular": "~1.2.28",
-    "uikit": "~2.14.0"
+    "uikit": "~2.14.0",
+    "angularAMD": "~0.2.1",
+    "requirejs": "~2.1.0"
   }
 }

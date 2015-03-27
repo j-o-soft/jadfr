@@ -144,7 +144,6 @@ class Base(Configuration):
         'rest_framework',
         'djangofeeds',
         'mptt',
-        'apps.usercategories',
         'apps.userfeeds'
     ]
 
