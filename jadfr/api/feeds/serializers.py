@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from apps.userfeeds.models import UserFeed, UserFeedEntry, Category
+from apps.userfeeds.models import UserFeed, UserFeedEntry, UserCategory
 from djangofeeds.models import Feed
 
 from rest_framework import serializers
@@ -70,7 +70,7 @@ class CategorySerializer(serializers.ModelSerializer):
     parent = RecursiveField()
 
     class Meta:
-        model = Category
+        model = UserCategory
         fields = ('id', 'name', 'parent')
 
 
@@ -109,5 +109,5 @@ class UserFeedSerializer(serializers.ModelSerializer):
 
 class FeedSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Category
+        model = UserCategory
         fields = ('id', 'name', 'parent')
