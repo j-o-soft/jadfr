@@ -5,8 +5,7 @@ from djangofeeds.models import Category as BaseFeedCategory
 from mock import patch
 
 from apps.userfeeds.services import FeedWriteService, CategoryInfo, FeedInfo
-from apps.usercategories.models import Category
-from apps.userfeeds.models import UserFeed, Category
+from apps.userfeeds.models import UserFeed, UserCategory
 
 
 class ImportFeedBase(TestCase):
@@ -38,12 +37,12 @@ class TestFeedWriteService(ImportFeedBase):
         user = User.objects.get()
         service = FeedWriteService(user)
 
-        assert Category.objects.count() == 0
+        assert UserCategory.objects.count() == 0
 
         category_result = CategoryInfo(name='foo')
         service.rsave([category_result])
 
-        category = Category.objects.all().get()
+        category = UserCategory.objects.all().get()
         assert category.name == category_result.name
 
     def test_feed_gets_created(self):
