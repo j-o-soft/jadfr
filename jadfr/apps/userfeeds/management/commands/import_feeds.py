@@ -28,7 +28,11 @@ class Command(BaseCommand):
         """
         verbose = options.get('verbose')
         user = options.get('user')
+        if not user:
+            self.parser.error("username is required")
         file_name = options.get('filename')
+        if not file_name:
+            self.parser.error("filename is required")
         dry_run = options.get('dry_run')
 
         # if a user is give, select it from the db
