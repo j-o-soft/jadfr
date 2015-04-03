@@ -1,11 +1,12 @@
 from api.feeds.serializers import UserFeedSerializer, UserFeedEntrySerializer
-from apps.userfeeds.models import UserFeed, UserFeedEntry
+from apps.userfeeds.models import UserFeed, UserFeedEntry, UserCategory
 from apps.userfeeds import tasks
 
 from django.core.urlresolvers import reverse
 from logging import getLogger
 from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -26,6 +27,10 @@ class FeedList(ListAPIView):
 class FeedEntriesList(ListAPIView):
     queryset = UserFeedEntry.objects.all()(tasks.inc_entry_status)
     serializer_class = UserFeedEntrySerializer
+    pagination_class = PageNumberPagination
+
+    def __init__(self):
+        self.pagination_class.page_size = 10
 
     def get_queryset(self):
         filters = self.kwargs.get('filters', {})
@@ -72,3 +77,15 @@ class AddFeed(APIView):
             return {'Location': base_url}
         except (TypeError, KeyError):
             return {}
+
+
+class CategoryView(FeedEntriesList):
+
+    category_ids = []
+
+    def filter_queryset(self, qs):
+        return qs
+
+    def get(self, request, category_ids):
+        self.category_ids = filter(lambda s: s, category_ids.split('/'))
+        return super(CategoryView, self).get(request)
