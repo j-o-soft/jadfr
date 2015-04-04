@@ -79,13 +79,35 @@ class AddFeed(APIView):
             return {}
 
 
-class CategoryView(FeedEntriesList):
-
-    category_ids = []
+class BaseCategoryView(FeedEntriesList):
 
     def filter_queryset(self, qs):
+        category_ids = self.get_category_ids()
+        qs = qs.filter(feed__categories__id__in=category_ids)
         return qs
 
-    def get(self, request, category_ids):
-        self.category_ids = filter(lambda s: s, category_ids.split('/'))
-        return super(CategoryView, self).get(request)
+    def get(self, request, *args, **kwargs):
+        return super(BaseCategoryView, self).get(request)
+
+
+class ExactCategoryView(BaseCategoryView):
+
+    def get_category_ids(self):
+        return self.kwargs['category_id'],
+
+
+class PathCategoryView(BaseCategoryView):
+
+    def get_category_ids(self):
+        ids = filter(
+            lambda s: s,
+            self.kwargs['category_ids'].split('/')
+        )
+        # create list of shifted pairs
+        id_pairs = zip(ids, ids[1:])
+        # iterate over all pairs and select category given by id and parent id
+        for parent, child in id_pairs:
+            category = UserCategory.objects.get(id=child, parent_id=parent)
+        # category has the value of the last category found (the depest one)
+        # we are interested in category and all it's subcategories.
+        return (c.id for c in category.get_descendants(include_self=True))
